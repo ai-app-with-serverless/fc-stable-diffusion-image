@@ -77,7 +77,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
   git fetch && \
   git reset --hard ${SHA} && \
   pip install -r requirements_versions.txt
-COPY ./webui.py /stable-diffusion-webui/webui.py
 COPY . /docker
 
 RUN \
@@ -89,7 +88,7 @@ RUN \
 
 WORKDIR ${ROOT}
 ENV NVIDIA_VISIBLE_DEVICES=all
-ENV CLI_ARGS="--xformers --api --nowebui --disable-safe-unpickle --no-half-vae --enable-insecure-extension-access --skip-version-check --no-download-sd-model"
+ENV CLI_ARGS="--xformers  --disable-safe-unpickle --no-half-vae --enable-insecure-extension-access --skip-version-check --no-download-sd-model"
 EXPOSE 7860
 ENTRYPOINT ["/docker/entrypoint.sh"]
 CMD python -u webui.py --listen --port 7860 ${CLI_ARGS}
