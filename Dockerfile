@@ -70,13 +70,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # TODO: either remove if fixed in A1111 (unlikely) or move to the top with other apt stuff
 RUN apt-get -y install libgoogle-perftools-dev && apt-get clean
 ENV LD_PRELOAD=libtcmalloc.so
-COPY ./requirements_versions.txt /stable-diffusion-webui/requirements_versions.txt
 ARG SHA=b6af0a3
 RUN --mount=type=cache,target=/root/.cache/pip \
   cd stable-diffusion-webui && \
   git fetch && \
-  git reset --hard ${SHA} && \
-  pip install -r requirements_versions.txt
+  git reset --hard ${SHA}
+COPY ./requirements_versions.txt /stable-diffusion-webui/requirements_versions.txt
+RUN cd stable-diffusion-webui && \
+    pip install -r requirements_versions.txt
 COPY . /docker
 
 RUN \
